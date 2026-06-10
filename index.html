@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AI English Conversation</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    padding:40px;
+    background:#f4f4f4;
+}
+
+button{
+    padding:15px 30px;
+    font-size:20px;
+    cursor:pointer;
+    border:none;
+    border-radius:10px;
+    background:#007bff;
+    color:white;
+}
+
+#result{
+    margin-top:30px;
+    font-size:24px;
+}
+</style>
+
+</head>
+<body>
+
+<h1>AI English Conversation</h1>
+
+<p>Press the button and speak English.</p>
+
+<button onclick="startRecognition()">🎤 Speak</button>
+
+<div id="result"></div>
+
+<script>
+function startRecognition(){
+
+const SpeechRecognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+if(!SpeechRecognition){
+    alert("Speech Recognition is not supported.");
+    return;
+}
+
+const recognition = new SpeechRecognition();
+
+recognition.lang = "en-US";
+
+recognition.start();
+
+recognition.onresult = function(event){
+    const text = event.results[0][0].transcript;
+
+    document.getElementById("result").innerHTML =
+    "<b>You said:</b><br>" + text;
+
+    const utterance = new SpeechSynthesisUtterance(
+        "You said " + text
+    );
+
+    utterance.lang = "en-US";
+
+    speechSynthesis.speak(utterance);
+};
+}
+</script>
+
+</body>
+</html>
