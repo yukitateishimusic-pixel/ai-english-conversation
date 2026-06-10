@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>立石くんの楽しい英会話アプリ</title>
+<title>立石くんの楽しいフランス語会話アプリ</title>
 
 <style>
 body{
@@ -31,15 +31,26 @@ button{
 </head>
 <body>
 
-<h1>立石くんの楽しい英会話アプリ</h1>
+<h1>立石くんの楽しいフランス語会話アプリ</h1>
 
-<p>Press the button and speak English.</p>
+<p>ボタンを押してフランス語で話してください。</p>
 
-<button onclick="startRecognition()">🎤 Speak</button>
+<button onclick="startRecognition()">🎤 話す</button>
 
 <div id="result"></div>
 
 <script>
+
+const dictionary = {
+    "bonjour":"こんにちは",
+    "merci":"ありがとう",
+    "oui":"はい",
+    "non":"いいえ",
+    "je vais bien":"元気です",
+    "comment allez vous":"お元気ですか",
+    "au revoir":"さようなら"
+};
+
 function startRecognition(){
 
 const SpeechRecognition =
@@ -53,25 +64,39 @@ if(!SpeechRecognition){
 
 const recognition = new SpeechRecognition();
 
-recognition.lang = "en-US";
+recognition.lang = "fr-FR";
 
 recognition.start();
 
 recognition.onresult = function(event){
+
     const text = event.results[0][0].transcript;
 
+    let japanese = "（日本語訳なし）";
+
+    const lower = text.toLowerCase();
+
+    for(const key in dictionary){
+        if(lower.includes(key)){
+            japanese = dictionary[key];
+            break;
+        }
+    }
+
     document.getElementById("result").innerHTML =
-    "<b>You said:</b><br>" + text;
+    "<b>あなたが話したフランス語</b><br>" +
+    text +
+    "<br><br><b>日本語訳</b><br>" +
+    japanese;
 
-    const utterance = new SpeechSynthesisUtterance(
-        "You said " + text
-    );
-
-    utterance.lang = "en-US";
-
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "fr-FR";
     speechSynthesis.speak(utterance);
+
 };
+
 }
+
 </script>
 
 </body>
